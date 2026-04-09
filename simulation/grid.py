@@ -24,6 +24,9 @@ def get_pairs(pos, cfg):
     # in_neighborhood[i, j] = True if j is in any neighbor cell of i
     in_neighborhood = (cell_id[None, :] == nb_ids[:, :, None]).any(axis=1)  # (N, N)
 
+    # NOTE: this is O(N²) in memory — builds a full (N,N) neighborhood mask.
+    # A proper cell list would loop over cells, but for N ≤ 900 the NumPy vectorization is faster
+
     # unique pairs i < j only
     i_idx, j_idx = np.where(np.tril(in_neighborhood, k=-1))
 
